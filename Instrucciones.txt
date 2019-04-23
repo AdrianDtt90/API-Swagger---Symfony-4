@@ -1,0 +1,108 @@
+Creamos el proyecto
+    $ composer create-project symfony/skeleton
+
+Actualizamos Flex
+    $ composer require symfony/flex
+
+Agregamos API Plataform
+    $ composer require api
+
+Agregamos Easy Admin Bundle
+    $ composer require admin
+
+Agregamos los bundles de desarrollo para crear entidades, precargar datos
+    $ composer require maker profiler orm-fixtures --dev
+
+Luego Agregamos symfony/dotenv para que el código pueda utilizar variables glovales seteadas en .env
+    $ composer require symfony/dotenv
+
+----------------------------------- Correccion de error---------------------------------
+Uncaught Symfony\Component\Debug\Exception\ClassNotFoundException: Attempted to load class "Kernel" from namespace "App".)
+----------------------------------- Correccion de error---------------------------------
+
+Agregar en composer.json (por error PHP Fatal error:  
+"autoload": {
+    "psr-4": {
+        "App\\": "src/"
+    }
+},
+"autoload-dev": {
+    "psr-4": {
+        "App\\": "src/"
+    }
+},
+
+Luego ejecutar para que se actualice el composer
+    $ composer dump-autoload
+y
+    $ composer update
+
+Luego para interpretar los YAML
+    $ composer require symfony/yaml
+
+----------------------------------- Correccion de error---------------------------------
+----------------------------------- Correccion de error---------------------------------
+
+Agregamos el bundle "make" (por si lo pide)
+    $ composer require maker --dev
+
+Agregamos la entidad (EJ. TODO)
+    $ php bin/console make:entity
+
+Ahora Base de datos (crear con XAMPP y levantar server)
+Configuramos DB en .env
+    ###> doctrine/doctrine-bundle ###
+    # Format described at http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url
+    # For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db"
+    # Configure your db driver and server_version in config/packages/doctrine.yaml
+    DATABASE_URL=mysql://root:@127.0.0.1:3306/<Nombre Esquema>
+    ###< doctrine/doctrine-bundle ###
+
+Luego creamos DB y actualizamos esquema con la entidad creada (Ej. TODO)
+    $ php bin/console doctrine:database:create
+    $ php bin/console doctrine:schema:update --force --dump-sql
+
+Luego creamos el archivo config/packages/easy_admin.yaml con el contenido
+    easy_admin:
+        entities:
+            - App\Entity\ToDo
+
+Agregamos el .htaccess
+    <IfModule mod_rewrite.c>
+        Options -MultiViews
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ index.php [QSA,L]
+    </IfModule>
+
+    <IfModule !mod_rewrite.c>
+        <IfModule mod_alias.c>
+            RedirectMatch 302 ^/$ /index.php/
+        </IfModule>
+    </IfModule>
+
+LISTO!!!
+
+Agregamos el bundle de servidor
+    $ composer require --dev symfony/web-server-bundle
+
+Ejecutar para reescribir las reglas del server e instalar el .htaccess en public
+    $ composer require symfony/apache-pack
+
+Instalamos los assets de api y admin
+    $ php bin/console assets:install
+
+ahora corremos el servidor
+    $ php bin/console server:run
+
+AH!! para que aparescan en el swagger, poner en cada entidad Entity/*
+    use ApiPlatform\Core\Annotation\ApiResource;
+y al comienzo del comentario de cada clase junto al * @ORM\Entity
+    * @ApiResource(iri="http://schema.org/ToDo")
+
+Para ver endpoints
+    localhost:8000/api
+
+Para ver admin
+    localhost:8000/admin
+

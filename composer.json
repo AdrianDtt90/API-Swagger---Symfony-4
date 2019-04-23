@@ -1,0 +1,30 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/flex": "^1.2",
+        "api-platform/api-pack": "^1.2",
+        "easycorp/easyadmin-bundle": "^2.1",
+        "symfony/dotenv": "^4.2",
+        "symfony/yaml": "^4.2",
+        "symfony/apache-pack": "^1.0"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.11",
+        "symfony/web-server-bundle": "^4.2"
+    }
+}
